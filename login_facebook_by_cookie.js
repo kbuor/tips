@@ -1,32 +1,13 @@
-// Thay thế 'YOUR_COOKIE' bằng chuỗi cookie Facebook của bạn
-const cookie = 'c_user=YOUR_COOKIE;';
+// Thay thế giá trị cookie bằng cookie của bạn
+var cookieValue = "YOUR_FACEBOOK_COOKIE_VALUE";
 
-// Tạo XMLHttpRequest
-const xhr = new XMLHttpRequest();
+// Tạo các cookie từ giá trị đã cho
+cookieValue.split(';').forEach(function(cookie) {
+    var parts = cookie.split('=');
+    var name = parts[0].trim();
+    var value = (parts[1] || '').trim();
+    document.cookie = name + '=' + value + ';domain=.facebook.com;path=/;expires=Session;secure=true';
+});
 
-// Mở kết nối POST đến URL đăng nhập Facebook
-xhr.open('POST', 'https://m.facebook.com/login/ajax_login/');
-
-// Set header Content-Type
-xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-
-// Set cookie
-xhr.setRequestHeader('Cookie', cookie);
-
-// Gửi yêu cầu
-xhr.send('login_password=&save-device=on&ajax=1&form_type=login&username=');
-
-// Xử lý kết quả phản hồi
-xhr.onload = function() {
-  if (xhr.status === 200) {
-    const response = JSON.parse(xhr.responseText);
-    if ('access_token' in response) {
-      console.log('Đăng nhập thành công!');
-      // Sử dụng access_token để truy cập API Facebook
-    } else {
-      console.log('Đăng nhập thất bại.');
-    }
-  } else {
-    console.error('Lỗi khi gửi yêu cầu đăng nhập.');
-  }
-};
+// Tải lại trang để đăng nhập bằng cookie
+window.location.reload();
